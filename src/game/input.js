@@ -23,4 +23,5 @@ export class Input {
   get down() { return this.keys.has(this.map.down); }
   get jump() { return this.keys.has(this.map.jump); }
   get fire() { return this.keys.has(this.map.fire); }
+  get reload() { return this.keys.has(this.map.reload); }
 }

@@ -7,9 +7,10 @@ export const DEFAULT_KEYBINDS = {
   down: 'ArrowDown',
   jump: 'Space',
   fire: 'KeyZ',
+  reload: 'KeyR',
 };
 
-export const ACTION_ORDER = ['left', 'right', 'up', 'down', 'jump', 'fire'];
+export const ACTION_ORDER = ['left', 'right', 'up', 'down', 'jump', 'fire', 'reload'];
 
 export const ACTION_LABELS = {
   left: 'DI CHUYỂN TRÁI',
@@ -18,6 +19,7 @@ export const ACTION_LABELS = {
   down: 'NẰM / THU NGƯỜI',
   jump: 'NHẢY',
   fire: 'BẮN',
+  reload: 'NẠP ĐẠN',
 };
 
 export function loadKeybinds() {

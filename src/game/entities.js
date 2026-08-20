@@ -8,8 +8,26 @@ export function createPlayer() {
     vx: 0, vy: 0, onGround: true, facing: 1, crouch: false,
     aimAngle: 0, legPhase: 0, invT: 0, alive: true,
     weapon: 'machinegun', rapidFire: false, shootCd: 0, hurtFlashT: 0, moving: false, airborne: false,
-    ammo: MAGAZINE_SIZE, reloading: false, reloadT: 0,
+    ammo: MAGAZINE_SIZE, reloading: false, reloadT: 0, reloadTotal: RELOAD_TIME,
   };
+}
+
+// Starts a reload sized to how much ammo is actually missing — a full empty
+// magazine takes the full RELOAD_TIME, a mostly-full one takes proportionally
+// less. Returns false (no-op) if the magazine is already full.
+function startReload(p) {
+  const missing = MAGAZINE_SIZE - p.ammo;
+  if (missing <= 0) return false;
+  p.reloading = true;
+  p.reloadTotal = RELOAD_TIME * (missing / MAGAZINE_SIZE);
+  p.reloadT = p.reloadTotal;
+  return true;
+}
+
+// Manual reload: player presses the reload key even with ammo still left.
+export function tryReload(p, input) {
+  if (!input.reload || p.reloading) return false;
+  return startReload(p);
 }
 
 export function computeAim(input, grounded, movingH) {
@@ -91,8 +109,7 @@ export function tryFire(p, input, particles) {
   p.ammo -= 1;
   if (p.ammo <= 0) {
     p.ammo = 0;
-    p.reloading = true;
-    p.reloadT = RELOAD_TIME;
+    startReload(p); // magazine is empty — always the full RELOAD_TIME
   }
   const feetY = p.y + p.h - (p.crouch ? 10 : 0);
   const muzzle = getMuzzlePoint(p.x + p.w / 2, feetY, 1, p.facing, p.aimAngle, p.crouch);

@@ -1,10 +1,10 @@
-import { CANVAS_W as W, CANVAS_H as H, GROUND_Y, LEVEL_WIDTH, BOSS_X, WEAPONS, TIME_LIMIT, SCORE, MAGAZINE_SIZE, RELOAD_TIME } from './constants.js';
+import { CANVAS_W as W, CANVAS_H as H, GROUND_Y, LEVEL_WIDTH, BOSS_X, WEAPONS, TIME_LIMIT, SCORE, MAGAZINE_SIZE } from './constants.js';
 import { Input } from './input.js';
 import { ParticleSystem } from './particles.js';
 import { drawBackground, drawForegroundOcclusion } from './background.js';
 import { drawSoldier, drawTurret, drawCapsule, drawBossWall, drawBullet, drawGroundShadow } from './sprites.js';
 import {
-  createPlayer, updatePlayerPhysics, playerHitbox, tryFire, updateBullets,
+  createPlayer, updatePlayerPhysics, playerHitbox, tryFire, tryReload, updateBullets,
   createSoldierEnemy, createTurretEnemy, createGrenadierEnemy, updateEnemy,
   createPickup, createBoss, updateBoss,
 } from './entities.js';
@@ -157,6 +157,7 @@ export class ContraEngine {
     if (this.player.moving && this.player.onGround && Math.random() < 0.3) {
       this.particles.dust(this.player.x + this.player.w / 2, this.player.y + this.player.h, this.player.facing);
     }
+    tryReload(this.player, input);
     const newBullets = tryFire(this.player, input, this.particles);
     if (newBullets) { this.playerBullets.push(...newBullets); SFX[this.player.weapon === 'fire' ? 'flame' : 'shoot'](); }
     if (this.player.ammo !== prevAmmo || this.player.reloading !== prevReloading) {
@@ -365,7 +366,7 @@ export class ContraEngine {
       if (this.player.reloading) {
         const bx = this.player.x - this.camX + this.player.w / 2;
         const by = this.player.y + this.player.h - 78;
-        const pct = 1 - this.player.reloadT / RELOAD_TIME;
+        const pct = 1 - this.player.reloadT / this.player.reloadTotal;
         ctx.fillStyle = 'rgba(0,0,0,0.6)';
         ctx.fillRect(bx - 16, by, 32, 6);
         ctx.fillStyle = '#ffe066';

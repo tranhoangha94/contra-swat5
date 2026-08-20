@@ -43,7 +43,7 @@ export default function TitleScreen({ onStart, onSettings, onLeaderboard }) {
           <div><b>{keyLabel(binds.left)} {keyLabel(binds.right)}</b> di chuyển</div>
           <div><b>{keyLabel(binds.up)}</b> ngắm lên · <b>{keyLabel(binds.down)}</b> nằm/thu người</div>
           <div><b>{keyLabel(binds.jump)}</b> nhảy</div>
-          <div><b>{keyLabel(binds.fire)}</b> bắn</div>
+          <div><b>{keyLabel(binds.fire)}</b> bắn · <b>{keyLabel(binds.reload)}</b> nạp đạn</div>
         </div>
         <div className="title-links">
           <button className="settings-link" onClick={onSettings}>⚙ TÙY CHỈNH PHÍM</button>
