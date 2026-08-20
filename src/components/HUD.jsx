@@ -10,7 +10,16 @@ function LifeIcon({ lit }) {
   );
 }
 
-export default function HUD({ score, lives, weapon, rapidFire, boss }) {
+function formatTime(sec) {
+  const s = Math.max(0, Math.floor(sec));
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${m}:${String(r).padStart(2, '0')}`;
+}
+
+export default function HUD({ score, lives, weapon, rapidFire, boss, timeLeft, ammo }) {
+  const low = timeLeft != null && timeLeft <= 60;
+  const ammoLow = ammo && !ammo.reloading && ammo.ammo <= 8;
   return (
     <div className="hud">
       <div className="hud-top">
@@ -21,9 +30,17 @@ export default function HUD({ score, lives, weapon, rapidFire, boss }) {
           <span className="weapon-chip" style={{ borderColor: weapon.color, color: weapon.color }}>{weapon.letter}</span>
           {weapon.name}
           {rapidFire && <span className="rapid-chip">R</span>}
+          {ammo && (
+            <span className={`ammo-chip ${ammo.reloading ? 'reloading' : ''} ${ammoLow ? 'low' : ''}`}>
+              {ammo.reloading ? '...' : `${ammo.ammo}/${ammo.max}`}
+            </span>
+          )}
         </div>
         <div className="hud-score">SCORE {String(score).padStart(6, '0')}</div>
       </div>
+      {timeLeft != null && (
+        <div className={`hud-timer ${low ? 'low' : ''}`}>⏱ {formatTime(timeLeft)}</div>
+      )}
       {boss && (
         <div className="boss-bar-wrap">
           <div className="boss-label">CORE WALL</div>

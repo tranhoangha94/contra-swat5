@@ -64,6 +64,22 @@
 
 .mission { font-size: 10px; color: #8fd3ff; margin: 4px 0 12px; text-shadow: 2px 2px 0 #000; }
 
+.name-input {
+  display: block;
+  margin: 0 auto 12px;
+  width: min(80%, 260px);
+  font-family: inherit;
+  font-size: 10px;
+  text-align: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #3a4a3a;
+  padding: 9px 10px;
+  outline: none;
+}
+.name-input:focus { border-color: #ffe066; }
+.name-input::placeholder { color: #6b8a70; }
+
 .start-btn {
   font-family: inherit;
   font-size: 11px;
@@ -88,9 +104,14 @@
 }
 .controls b { color: #ffe066; }
 
+.title-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 10px;
+}
+
 .settings-link {
-  display: block;
-  margin: 12px auto 0;
   font-family: inherit;
   font-size: 8px;
   color: #9fc7a8;

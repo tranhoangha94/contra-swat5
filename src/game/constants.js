@@ -22,6 +22,23 @@ export const WEAPONS = {
 export const RAPID_FIRE_MULTIPLIER = 0.5;
 export const RAPID_CAPSULE = { name: 'RAPID FIRE', letter: 'R', color: '#ffffff' };
 
+// Ammo: a shared magazine regardless of weapon — empty it and you're stuck
+// reloading (can't fire) for RELOAD_TIME seconds.
+export const MAGAZINE_SIZE = 30;
+export const RELOAD_TIME = 2;
+
+// 15-minute mission clock — if the boss isn't dead by the time this runs out,
+// the run ends automatically.
+export const TIME_LIMIT = 15 * 60;
+
+export const SCORE = {
+  ENEMY: 100, // regular soldiers/grenadiers
+  TURRET: 200, // pop-up bunkers
+  AIRBORNE_KILL: 500, // any kill landed while the player is mid-air
+  BOSS: 5000,
+  TIME_BONUS_PER_SEC: 100, // awarded per second left on the clock, on a win
+};
+
 export const COLORS = {
   sky1: '#04050c',
   sky2: '#070a16',

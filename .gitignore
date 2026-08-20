@@ -16,6 +16,9 @@ dist-ssr
 # actually used by the game and meant to be shared
 ref/
 
+# runtime leaderboard data (dev-server only, written by vite-leaderboard-plugin.js)
+leaderboard.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

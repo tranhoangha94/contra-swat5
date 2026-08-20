@@ -5,34 +5,73 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 8px;
   font-family: 'Press Start 2P', monospace;
   text-align: center;
   color: #fff;
+  padding: 12px;
+  overflow-y: auto;
 }
 
 .end-screen.lose { background: radial-gradient(ellipse at center, #3a0e0a 0%, #0a0505 70%); }
 .end-screen.win { background: radial-gradient(ellipse at center, #123a1e 0%, #050a06 70%); }
 
 .end-screen h1 {
-  font-size: clamp(22px, 5vw, 34px);
+  font-size: clamp(18px, 4vw, 28px);
   letter-spacing: 3px;
   text-shadow: 3px 3px 0 #000;
-  color: var(--accent, #fff);
+  margin: 0;
 }
 .end-screen.lose h1 { color: #ff5c5c; }
 .end-screen.win h1 { color: #7fffb0; }
 
-.end-screen .score { font-size: 14px; color: #ffe066; text-shadow: 2px 2px 0 #000; }
+.end-screen .score { font-size: 13px; color: #ffe066; text-shadow: 2px 2px 0 #000; margin: 0; }
+.end-screen .bonus { font-size: 9px; color: #7fffb0; text-shadow: 2px 2px 0 #000; margin: 0; }
+.end-screen .bonus.dim { color: #ffb0a0; }
+
+.board-panel {
+  width: min(90%, 320px);
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px solid #2a3f2a;
+  padding: 8px 10px;
+  margin-top: 4px;
+}
+.board-title { font-size: 9px; color: #ffe066; margin-bottom: 6px; text-shadow: 2px 2px 0 #000; }
+.board-status { font-size: 8px; color: #9fc7a8; }
+.board-status.error { color: #ff9d8a; }
+
+.board-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
+.board-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 8px;
+  color: #cfe8d6;
+  padding: 3px 4px;
+}
+.board-list li.mine { background: rgba(255, 224, 102, 0.18); color: #ffe066; }
+.board-list .rank { width: 14px; text-align: right; opacity: 0.7; }
+.board-list .bname { flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board-list .bscore { opacity: 0.9; }
+
+.end-actions { display: flex; gap: 10px; margin-top: 4px; }
 
 .end-screen button {
   font-family: inherit;
-  font-size: 11px;
+  font-size: 10px;
   color: #10140f;
   background: linear-gradient(180deg, #ffe066, #e6a832);
   border: none;
-  padding: 14px 20px;
+  padding: 11px 16px;
   cursor: pointer;
   box-shadow: 0 4px 0 #8a5c17;
 }
 .end-screen button:active { transform: translateY(3px); box-shadow: 0 1px 0 #8a5c17; }
+.end-screen button.ghost {
+  color: #cfe8d6;
+  background: transparent;
+  border: 2px solid #3a4a3a;
+  box-shadow: none;
+}
+
+.end-screen .hint { font-size: 7px; color: #7d9a85; margin: 2px 0 0; }

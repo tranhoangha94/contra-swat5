@@ -1,4 +1,4 @@
-import { CANVAS_W as W, CANVAS_H as H, GROUND_Y, LEVEL_WIDTH, BOSS_X, WEAPONS } from './constants.js';
+import { CANVAS_W as W, CANVAS_H as H, GROUND_Y, LEVEL_WIDTH, BOSS_X, WEAPONS, TIME_LIMIT, SCORE, MAGAZINE_SIZE, RELOAD_TIME } from './constants.js';
 import { Input } from './input.js';
 import { ParticleSystem } from './particles.js';
 import { drawBackground, drawForegroundOcclusion } from './background.js';
@@ -74,6 +74,7 @@ export class ContraEngine {
     this.bossGraceT = 0;
     this.boss = null;
     this.time = 0;
+    this._lastTimeEmit = -1;
     this.ended = false;
     this.particles.list = [];
     this.particles.lights = [];
@@ -98,6 +99,8 @@ export class ContraEngine {
     this.cb.onWeapon?.(this.player.weapon);
     this.cb.onRapid?.(this.player.rapidFire);
     this.cb.onBoss?.(this.boss ? { hp: this.boss.hp, maxHp: this.boss.maxHp } : null);
+    this.cb.onTime?.(TIME_LIMIT);
+    this.cb.onAmmo?.({ ammo: this.player.ammo, max: MAGAZINE_SIZE, reloading: this.player.reloading });
   }
 
   _loop = ts => {
@@ -121,15 +124,34 @@ export class ContraEngine {
     if (this.lives <= 0) {
       this.ended = true;
       this.particles.explosion(this.player.x + this.player.w / 2, this.player.y + this.player.h / 2, true);
-      setTimeout(() => this.cb.onGameOver?.(this.score), 700);
+      setTimeout(() => this.cb.onGameOver?.(this.score, 'dead'), 700);
     }
+  }
+
+  _timeUp() {
+    if (this.ended) return;
+    this.ended = true;
+    this.lives = 0;
+    this.cb.onLives?.(0);
+    this.particles.explosion(this.player.x + this.player.w / 2, this.player.y + this.player.h / 2, true);
+    SFX.hurt();
+    setTimeout(() => this.cb.onGameOver?.(this.score, 'timeout'), 700);
   }
 
   _update(dt) {
     if (this.ended) { this.particles.update(dt); return; }
     this.time += dt;
+    const remaining = Math.max(0, TIME_LIMIT - this.time);
+    const remainingWhole = Math.ceil(remaining);
+    if (remainingWhole !== this._lastTimeEmit) {
+      this._lastTimeEmit = remainingWhole;
+      this.cb.onTime?.(remainingWhole);
+    }
+    if (remaining <= 0) { this._timeUp(); return; }
     const input = this.input;
     const prevWeapon = this.player.weapon;
+    const prevAmmo = this.player.ammo;
+    const prevReloading = this.player.reloading;
 
     updatePlayerPhysics(this.player, input, dt, this.platforms);
     if (this.player.moving && this.player.onGround && Math.random() < 0.3) {
@@ -137,6 +159,10 @@ export class ContraEngine {
     }
     const newBullets = tryFire(this.player, input, this.particles);
     if (newBullets) { this.playerBullets.push(...newBullets); SFX[this.player.weapon === 'fire' ? 'flame' : 'shoot'](); }
+    if (this.player.ammo !== prevAmmo || this.player.reloading !== prevReloading) {
+      this.cb.onAmmo?.({ ammo: this.player.ammo, max: MAGAZINE_SIZE, reloading: this.player.reloading });
+      if (this.player.reloading && !prevReloading) SFX.reload();
+    }
 
     updateBullets(this.playerBullets, dt, this.player.weapon === 'fire' ? this.particles : null);
     updateBullets(this.enemyBullets, dt, null);
@@ -177,7 +203,9 @@ export class ContraEngine {
           this.particles.spark(b.x, b.y, '#ffdd80', 6);
           if (e.hp <= 0) {
             e.alive = false;
-            this.score += e.scoreValue;
+            // style bonus: any kill landed while airborne is worth a flat 500,
+            // overriding the enemy's normal point value
+            this.score += this.player.onGround ? e.scoreValue : SCORE.AIRBORNE_KILL;
             this.cb.onScore?.(this.score);
             this.particles.explosion(e.x + e.w / 2, e.y + e.h / 2 - (e.type === 'turret' ? 14 : 0));
             SFX.explode();
@@ -211,6 +239,10 @@ export class ContraEngine {
           this.cb.onRapid?.(true);
         } else {
           this.player.weapon = pk.weaponKey;
+          // a new gun comes with a fresh magazine
+          this.player.ammo = MAGAZINE_SIZE;
+          this.player.reloading = false;
+          this.player.reloadT = 0;
         }
         SFX.pickup();
       }
@@ -246,9 +278,10 @@ export class ContraEngine {
             this.ended = true;
             this.shake = 24;
             this.particles.explosion(this.boss.x + this.boss.w / 2, this.boss.y + this.boss.h / 2, true);
-            this.score += 3000;
+            const timeBonus = Math.max(0, Math.floor(TIME_LIMIT - this.time)) * SCORE.TIME_BONUS_PER_SEC;
+            this.score += SCORE.BOSS + timeBonus;
             this.cb.onScore?.(this.score);
-            setTimeout(() => this.cb.onWin?.(this.score), 1100);
+            setTimeout(() => this.cb.onWin?.(this.score, timeBonus), 1100);
           }
         }
       }
@@ -328,6 +361,24 @@ export class ContraEngine {
           crouch: this.player.crouch, moving: this.player.moving, airborne: this.player.airborne,
           hitFlash: this.player.hurtFlashT > 0, face: true,
         });
+      }
+      if (this.player.reloading) {
+        const bx = this.player.x - this.camX + this.player.w / 2;
+        const by = this.player.y + this.player.h - 78;
+        const pct = 1 - this.player.reloadT / RELOAD_TIME;
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(bx - 16, by, 32, 6);
+        ctx.fillStyle = '#ffe066';
+        ctx.fillRect(bx - 16, by, 32 * Math.max(0, Math.min(1, pct)), 6);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(bx - 16, by, 32, 6);
+        ctx.fillStyle = '#fff';
+        ctx.font = '7px "Press Start 2P", monospace';
+        ctx.textAlign = 'center';
+        // plain ASCII on purpose: the pixel font's canvas glyphs render
+        // Vietnamese combining diacritics with stray marks at this size
+        ctx.fillText('RELOAD', bx, by - 4);
       }
     }
 

@@ -34,6 +34,24 @@
 }
 @keyframes rapidPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
 
+.ammo-chip { font-size: 8px; color: #cfe8d6; opacity: 0.85; }
+.ammo-chip.low { color: #ff9d5c; }
+.ammo-chip.reloading { color: #ffe066; animation: rapidPulse 0.5s ease-in-out infinite; }
+
+.hud-timer {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #cfe8d6;
+  text-shadow: 2px 2px 0 #000;
+  background: rgba(0,0,0,0.35);
+  padding: 4px 8px;
+}
+.hud-timer.low { color: #ff5c5c; animation: timerFlash 0.5s ease-in-out infinite; }
+@keyframes timerFlash { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
 .boss-bar-wrap { margin-top: 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .boss-label { font-size: 9px; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; color: #ffb0a0; }
 .boss-bar-bg { width: 420px; max-width: 90%; height: 14px; background: #1a0d0d; border: 2px solid #fff; box-shadow: 2px 2px 0 #000; }

@@ -27,4 +27,5 @@ export const SFX = {
   explode: () => beep({ freq: 90, dur: 0.35, type: 'sawtooth', vol: 0.22, slide: -60 }),
   pickup: () => beep({ freq: 500, dur: 0.16, type: 'triangle', vol: 0.16, slide: 400 }),
   bossHit: () => beep({ freq: 120, dur: 0.15, type: 'square', vol: 0.14, slide: -30 }),
+  reload: () => beep({ freq: 220, dur: 0.18, type: 'square', vol: 0.1, slide: -160 }),
 };

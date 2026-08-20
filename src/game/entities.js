@@ -1,4 +1,4 @@
-import { GRAVITY, MOVE_SPEED, JUMP_VELOCITY, PLAYER_W, PLAYER_H, GROUND_Y, WEAPONS, RAPID_FIRE_MULTIPLIER, RAPID_CAPSULE } from './constants.js';
+import { GRAVITY, MOVE_SPEED, JUMP_VELOCITY, PLAYER_W, PLAYER_H, GROUND_Y, WEAPONS, RAPID_FIRE_MULTIPLIER, RAPID_CAPSULE, SCORE, MAGAZINE_SIZE, RELOAD_TIME } from './constants.js';
 import { aimVector, getMuzzlePoint } from './sprites.js';
 
 // ---------------- player ----------------
@@ -8,6 +8,7 @@ export function createPlayer() {
     vx: 0, vy: 0, onGround: true, facing: 1, crouch: false,
     aimAngle: 0, legPhase: 0, invT: 0, alive: true,
     weapon: 'machinegun', rapidFire: false, shootCd: 0, hurtFlashT: 0, moving: false, airborne: false,
+    ammo: MAGAZINE_SIZE, reloading: false, reloadT: 0,
   };
 }
 
@@ -67,6 +68,15 @@ export function updatePlayerPhysics(p, input, dt, platforms) {
   if (p.invT > 0) p.invT -= dt;
   if (p.hurtFlashT > 0) p.hurtFlashT -= dt;
   p.shootCd -= dt;
+
+  if (p.reloading) {
+    p.reloadT -= dt;
+    if (p.reloadT <= 0) {
+      p.reloading = false;
+      p.reloadT = 0;
+      p.ammo = MAGAZINE_SIZE;
+    }
+  }
 }
 
 export function playerHitbox(p) {
@@ -75,9 +85,15 @@ export function playerHitbox(p) {
 }
 
 export function tryFire(p, input, particles) {
-  if (!input.fire || p.shootCd > 0) return null;
+  if (!input.fire || p.shootCd > 0 || p.reloading) return null;
   const def = WEAPONS[p.weapon];
   p.shootCd = def.rate * (p.rapidFire ? RAPID_FIRE_MULTIPLIER : 1);
+  p.ammo -= 1;
+  if (p.ammo <= 0) {
+    p.ammo = 0;
+    p.reloading = true;
+    p.reloadT = RELOAD_TIME;
+  }
   const feetY = p.y + p.h - (p.crouch ? 10 : 0);
   const muzzle = getMuzzlePoint(p.x + p.w / 2, feetY, 1, p.facing, p.aimAngle, p.crouch);
   particles.muzzleFlash(muzzle.x, muzzle.y);
@@ -116,19 +132,19 @@ export function createSoldierEnemy(x) {
   return {
     id: uid++, type: 'soldier', x, y: GROUND_Y - 46, w: 24, h: 46, vx: 0, facing: -1,
     hp: 2, maxHp: 2, state: 'run', timer: 0.6 + Math.random() * 0.6, alive: true,
-    scoreValue: 100, hurtT: 0, legPhase: Math.random() * 10, carriesCapsule: false,
+    scoreValue: SCORE.ENEMY, hurtT: 0, legPhase: Math.random() * 10, carriesCapsule: false,
   };
 }
 export function createTurretEnemy(x) {
   return {
     id: uid++, type: 'turret', x, y: GROUND_Y, w: 30, h: 20, vx: 0, facing: -1,
-    hp: 4, maxHp: 4, popT: 0, shootCd: 1, alive: true, scoreValue: 150, hurtT: 0,
+    hp: 4, maxHp: 4, popT: 0, shootCd: 1, alive: true, scoreValue: SCORE.TURRET, hurtT: 0,
   };
 }
 export function createGrenadierEnemy(x) {
   return {
     id: uid++, type: 'grenadier', x, y: GROUND_Y - 46, w: 24, h: 46, vx: 0, facing: -1,
-    hp: 3, maxHp: 3, state: 'idle', timer: 1, alive: true, scoreValue: 200, hurtT: 0,
+    hp: 3, maxHp: 3, state: 'idle', timer: 1, alive: true, scoreValue: SCORE.ENEMY, hurtT: 0,
     legPhase: 0, carriesCapsule: false,
   };
 }
