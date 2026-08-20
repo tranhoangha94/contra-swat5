@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const DB_PATH = path.resolve(process.cwd(), 'leaderboard.json');
-const MAX_STORED = 200;
-const MAX_RETURNED = 20;
+const MAX_STORED = 10;
+const MAX_RETURNED = 10;
 const MAX_NAME_LEN = 20;
 
 function readBoard() {

@@ -42,7 +42,7 @@ export default function EndScreen({ win, score, reason, timeBonus, onRestart, on
         {status === 'error' && <div className="board-status error">Không lưu được điểm (server tắt?)</div>}
         {board && (
           <ol className="board-list">
-            {board.slice(0, 8).map((row, i) => {
+            {board.slice(0, 10).map((row, i) => {
               const mine = row.name === (playerName || 'ẨN DANH') && row.score === score;
               return (
                 <li key={i} className={mine ? 'mine' : ''}>

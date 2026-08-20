@@ -11,8 +11,8 @@
 import { Redis } from '@upstash/redis';
 
 const KEY = 'contra:leaderboard';
-const MAX_STORED = 200;
-const MAX_RETURNED = 20;
+const MAX_STORED = 10;
+const MAX_RETURNED = 10;
 const MAX_NAME_LEN = 20;
 
 function getRedis() {
