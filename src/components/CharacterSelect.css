@@ -1,0 +1,76 @@
+.char-select {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: radial-gradient(ellipse at 50% 20%, #1e3a2a 0%, #0a1810 55%, #050a06 100%);
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.char-banner {
+  max-width: 78%;
+  max-height: 34%;
+  object-fit: contain;
+  image-rendering: auto;
+  border: 3px solid #2a3f2a;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+  background: #fff;
+}
+
+.char-title {
+  font-size: 14px;
+  letter-spacing: 3px;
+  color: #ffe066;
+  text-shadow: 2px 2px 0 #000;
+  margin: 0;
+}
+
+.char-grid {
+  display: flex;
+  gap: 14px;
+}
+
+.char-card {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  padding: 0;
+  border: 3px solid #3a4a3a;
+  background: #0e1a10;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+.char-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+}
+.char-card span {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 8px;
+  color: #fff;
+  text-shadow: 2px 2px 0 #000;
+}
+.char-card.active {
+  border-color: #ffe066;
+  transform: translateY(-4px) scale(1.06);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+}
+
+.char-hint {
+  font-size: 9px;
+  color: #9fc7a8;
+  text-shadow: 2px 2px 0 #000;
+  margin-top: 4px;
+}

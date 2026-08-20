@@ -1,0 +1,9 @@
+#stage {
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: 960 / 540;
+  box-shadow: 0 0 0 4px #1a1e2b, 0 0 50px rgba(255, 160, 60, 0.15);
+  border: 3px solid #3a3f4d;
+  overflow: hidden;
+  position: relative;
+}

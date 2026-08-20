@@ -1,0 +1,40 @@
+.hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  padding: 10px 14px;
+}
+
+.hud-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 10px;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.hud-lives { display: flex; gap: 4px; }
+.life-icon { width: 20px; height: 20px; filter: drop-shadow(1px 1px 0 #000); }
+.life-icon.dim { opacity: 0.25; filter: grayscale(1); }
+
+.hud-weapon { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.weapon-chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border: 2px solid; border-radius: 3px;
+  background: rgba(0,0,0,0.5); font-size: 10px;
+}
+.rapid-chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #ffe066; color: #10140f; font-size: 8px;
+  animation: rapidPulse 0.6s ease-in-out infinite;
+}
+@keyframes rapidPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+
+.boss-bar-wrap { margin-top: 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.boss-label { font-size: 9px; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; color: #ffb0a0; }
+.boss-bar-bg { width: 420px; max-width: 90%; height: 14px; background: #1a0d0d; border: 2px solid #fff; box-shadow: 2px 2px 0 #000; }
+.boss-bar-fill { height: 100%; background: linear-gradient(180deg, #ff8a5c, #d43a2a); transition: width 0.15s linear; }
