@@ -33,6 +33,13 @@ function parseEntries(members) {
     .filter(Boolean);
 }
 
+async function trimToTop(redis) {
+  const count = await redis.zcard(KEY);
+  if (count > MAX_STORED) {
+    await redis.zremrangebyrank(KEY, 0, count - MAX_STORED - 1);
+  }
+}
+
 export default async function handler(req, res) {
   const redis = getRedis();
   if (!redis) {
@@ -41,6 +48,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'GET') {
+    await trimToTop(redis);
     const members = await redis.zrange(KEY, 0, MAX_RETURNED - 1, { rev: true });
     return res.status(200).json(parseEntries(members));
   }
@@ -54,11 +62,7 @@ export default async function handler(req, res) {
     }
     const entry = { name, score: Math.floor(score), date: new Date().toISOString() };
     await redis.zadd(KEY, { score: entry.score, member: JSON.stringify(entry) });
-
-    const count = await redis.zcard(KEY);
-    if (count > MAX_STORED) {
-      await redis.zremrangebyrank(KEY, 0, count - MAX_STORED - 1);
-    }
+    await trimToTop(redis);
 
     const members = await redis.zrange(KEY, 0, MAX_RETURNED - 1, { rev: true });
     return res.status(200).json(parseEntries(members));
