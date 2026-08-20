@@ -87,3 +87,17 @@
   text-shadow: 2px 2px 0 #000;
 }
 .controls b { color: #ffe066; }
+
+.settings-link {
+  display: block;
+  margin: 12px auto 0;
+  font-family: inherit;
+  font-size: 8px;
+  color: #9fc7a8;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px;
+}
+.settings-link:hover { color: #ffe066; }

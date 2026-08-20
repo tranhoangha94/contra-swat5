@@ -1,18 +1,27 @@
 import { useCallback, useState } from 'react';
 import TitleScreen from './components/TitleScreen.jsx';
 import CharacterSelect from './components/CharacterSelect.jsx';
+import SettingsScreen from './components/SettingsScreen.jsx';
 import GameCanvas from './components/GameCanvas.jsx';
 import EndScreen from './components/EndScreen.jsx';
 import './App.css';
 
 export default function App() {
-  const [screen, setScreen] = useState('title'); // title | select | playing | gameover | win
+  const [screen, setScreen] = useState('title'); // title | settings | select | playing | gameover | win
   const [finalScore, setFinalScore] = useState(0);
   const [runId, setRunId] = useState(0);
   const [character, setCharacter] = useState(null);
 
   const start = useCallback(() => {
     setScreen('select');
+  }, []);
+
+  const openSettings = useCallback(() => {
+    setScreen('settings');
+  }, []);
+
+  const backToTitle = useCallback(() => {
+    setScreen('title');
   }, []);
 
   const pick = useCallback(c => {
@@ -38,7 +47,8 @@ export default function App() {
 
   return (
     <div id="stage">
-      {screen === 'title' && <TitleScreen onStart={start} />}
+      {screen === 'title' && <TitleScreen onStart={start} onSettings={openSettings} />}
+      {screen === 'settings' && <SettingsScreen onBack={backToTitle} />}
       {screen === 'select' && <CharacterSelect onPick={pick} />}
       {screen === 'playing' && (
         <GameCanvas key={runId} faceSrc={character?.face} onGameOver={handleGameOver} onWin={handleWin} />

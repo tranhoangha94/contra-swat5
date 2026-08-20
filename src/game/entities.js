@@ -225,14 +225,16 @@ export function updateBoss(boss, dt, player, enemyBullets, particles) {
     for (const off of [-0.22, 0, 0.22]) {
       const a = baseAng + off;
       enemyBullets.push({
+        // long life so the shot always crosses the whole locked boss arena
+        // instead of fizzling out before it reaches a player camped at the edge
         x: cx, y: cy, vx: Math.cos(a) * 240, vy: Math.sin(a) * 240, angle: a,
-        color: '#ff5a3c', dmg: 1, isEnemy: true, life: 2.5,
+        color: '#ff5a3c', dmg: 1, isEnemy: true, life: 6,
       });
     }
   }
   // arm cannons fire straight forward occasionally
   if (Math.floor(boss.time * 10) % 34 === 0) {
     const ay = boss.y + boss.h * 0.28 + boss.armL + 13;
-    enemyBullets.push({ x: boss.x - 18, y: ay, vx: -230, vy: 0, angle: Math.PI, color: '#ffd15c', dmg: 1, isEnemy: true, life: 2.5 });
+    enemyBullets.push({ x: boss.x - 18, y: ay, vx: -230, vy: 0, angle: Math.PI, color: '#ffd15c', dmg: 1, isEnemy: true, life: 6 });
   }
 }
