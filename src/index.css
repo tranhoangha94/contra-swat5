@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* Press Start 2P has no Vietnamese glyph coverage — its combining marks
+   render as stray dots (see the "reload" bug this same thing caused on the
+   canvas HUD). It's kept only for ASCII display lettering (the CONTRA logo);
+   every screen's actual Vietnamese copy uses Be Vietnam Pro instead, which
+   is built for the language. */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Be+Vietnam+Pro:wght@400;600;700&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -21,7 +26,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Be Vietnam Pro', system-ui, sans-serif;
   color: #e8e8e8;
 }
 

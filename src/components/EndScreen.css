@@ -6,7 +6,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+  font-weight: 600;
   text-align: center;
   color: #fff;
   padding: 12px;
@@ -18,7 +19,8 @@
 
 .end-screen h1 {
   font-size: clamp(18px, 4vw, 28px);
-  letter-spacing: 3px;
+  font-weight: 700;
+  letter-spacing: 1px;
   text-shadow: 3px 3px 0 #000;
   margin: 0;
 }

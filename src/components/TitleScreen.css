@@ -22,14 +22,16 @@
   position: relative;
   z-index: 1;
   text-align: center;
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+  font-weight: 600;
   color: #fff;
   padding: 14px;
   max-height: 100%;
   overflow-y: auto;
 }
 
-.logo { margin: 0 0 8px; line-height: 1.1; }
+/* ASCII-only lettering — safe to keep the pixel font here */
+.logo { margin: 0 0 8px; line-height: 1.1; font-family: 'Press Start 2P', monospace; }
 .logo-main {
   display: block;
   font-size: clamp(30px, 7vw, 52px);

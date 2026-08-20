@@ -7,7 +7,8 @@
   justify-content: center;
   gap: 14px;
   background: radial-gradient(ellipse at 50% 20%, #1e3a2a 0%, #0a1810 55%, #050a06 100%);
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+  font-weight: 600;
   color: #fff;
   padding: 16px;
   overflow: hidden;
