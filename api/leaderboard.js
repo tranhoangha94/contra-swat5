@@ -15,13 +15,6 @@ const MAX_STORED = 200;
 const MAX_RETURNED = 20;
 const MAX_NAME_LEN = 20;
 
-// TEMP stopgap while the Redis integration isn't wired up on this deployment
-// yet — so the first real clear (Thiếu Úy Khang) doesn't just vanish.
-// Remove this once POST /api/leaderboard is confirmed working for real.
-const SEED_FALLBACK = [
-  { name: 'Thiếu Úy Khang', score: 90600, date: '2026-08-21T00:00:00.000Z' },
-];
-
 function getRedis() {
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -30,15 +23,20 @@ function getRedis() {
 }
 
 function parseEntries(members) {
+  // @upstash/redis auto-deserializes JSON-looking strings, so members here
+  // are already plain objects — only fall back to JSON.parse for raw strings.
   return members
-    .map(m => { try { return JSON.parse(m); } catch { return null; } })
+    .map(m => {
+      if (m && typeof m === 'object') return m;
+      try { return JSON.parse(m); } catch { return null; }
+    })
     .filter(Boolean);
 }
 
 export default async function handler(req, res) {
   const redis = getRedis();
   if (!redis) {
-    if (req.method === 'GET') return res.status(200).json(SEED_FALLBACK);
+    if (req.method === 'GET') return res.status(200).json([]);
     return res.status(503).json({ error: 'leaderboard database not configured on this deployment' });
   }
 
