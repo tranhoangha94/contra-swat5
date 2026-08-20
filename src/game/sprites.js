@@ -197,24 +197,25 @@ function paintSoldierBody(ctx, opts) {
   block(ctx, -2.5, 0, 5, 15, uniform, outline, 'right', pantsDark);
   ctx.restore();
 
-  // head
+  // head (2x scale — a bobblehead-style oversized head reads better at this sprite size)
   const headY = hipY - 19 - 8;
-  const gotFace = face && drawFaceHead(ctx, facing * 1.5, headY, 6.8, facing, outline);
+  const headR = 13;
+  const gotFace = face && drawFaceHead(ctx, facing * 1.5, headY, headR + 0.3, facing, outline);
   if (!gotFace) {
     ctx.beginPath();
     ctx.fillStyle = skin;
-    ctx.arc(facing * 1.5, headY, 6.5, 0, Math.PI * 2);
+    ctx.arc(facing * 1.5, headY, headR, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = outline;
     ctx.lineWidth = 1.2;
     ctx.stroke();
     ctx.fillStyle = '#241a12';
     ctx.beginPath();
-    ctx.arc(facing * 1.5, headY - 2.5, 6.2, Math.PI, Math.PI * 2);
+    ctx.arc(facing * 1.5, headY - 5, headR - 0.3, Math.PI, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = headband;
-    ctx.fillRect(facing * 1.5 - 6.4, headY - 2, 12.8, 3);
-    ctx.fillRect(-facing * 7.5, headY - 1.2, facing * -5, 2.2);
+    ctx.fillRect(facing * 1.5 - headR, headY - 4, headR * 2, 5);
+    ctx.fillRect(-facing * 10, headY - 2.4, facing * -8, 3.6);
   }
 
   // gun arm (front, rotated to aim)
@@ -310,23 +311,24 @@ function paintCrouch(ctx, p) {
   ctx.lineTo(chestX, chestY + 2);
   ctx.stroke();
 
-  // head, propped up at the front
+  // head, propped up at the front (2x scale to match the standing pose)
   const headX = chestX + facing * 6, headY = chestY - 3;
-  const gotFace = face && drawFaceHead(ctx, headX, headY, 5.9, facing, outline);
+  const headR2 = 11.2;
+  const gotFace = face && drawFaceHead(ctx, headX, headY, headR2 + 0.3, facing, outline);
   if (!gotFace) {
     ctx.beginPath();
     ctx.fillStyle = skin;
-    ctx.arc(headX, headY, 5.6, 0, Math.PI * 2);
+    ctx.arc(headX, headY, headR2, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = outline;
     ctx.lineWidth = 1.2;
     ctx.stroke();
     ctx.fillStyle = '#241a12';
     ctx.beginPath();
-    ctx.arc(headX, headY - 1.5, 5.4, Math.PI, Math.PI * 2);
+    ctx.arc(headX, headY - 3, headR2 - 0.2, Math.PI, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = headband;
-    ctx.fillRect(headX + facing * 1.2 - 5.6, headY - 1.6, 11.2, 2.6);
+    ctx.fillRect(headX + facing * 1.2 - headR2, headY - 3.2, headR2 * 2, 5.2);
   }
 
   // gun arm, propped forward right at ground level
