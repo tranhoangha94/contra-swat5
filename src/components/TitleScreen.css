@@ -48,7 +48,7 @@
 .logo-sub {
   display: block;
   margin-top: 10px;
-  font-size: clamp(11px, 2.4vw, 16px);
+  font-size: clamp(22px, 4.8vw, 32px);
   letter-spacing: 8px;
   color: #bfe6c8;
   text-shadow: 2px 2px 0 #000;
@@ -64,31 +64,31 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
 }
 
-.mission { font-size: 10px; color: #8fd3ff; margin: 4px 0 12px; text-shadow: 2px 2px 0 #000; }
+.mission { font-size: 20px; color: #8fd3ff; margin: 4px 0 12px; text-shadow: 2px 2px 0 #000; }
 
 .name-input {
   display: block;
   margin: 0 auto 12px;
-  width: min(80%, 260px);
+  width: min(80%, 420px);
   font-family: inherit;
-  font-size: 10px;
+  font-size: 20px;
   text-align: center;
   color: #fff;
   background: rgba(0, 0, 0, 0.4);
   border: 2px solid #3a4a3a;
-  padding: 9px 10px;
+  padding: 12px 14px;
   outline: none;
 }
 .name-input:focus { border-color: #ffe066; }
 .name-input::placeholder { color: #6b8a70; }
 
-.start-btn {
+.title-content .start-btn {
   font-family: inherit;
-  font-size: 11px;
+  font-size: 22px;
   color: #10140f;
   background: linear-gradient(180deg, #ffe066, #e6a832);
   border: none;
-  padding: 11px 18px;
+  padding: 14px 24px;
   cursor: pointer;
   box-shadow: 0 4px 0 #8a5c17, 0 4px 12px rgba(0,0,0,0.5);
   animation: pulse 1.4s ease-in-out infinite;
@@ -99,8 +99,8 @@
 .controls {
   margin-top: 14px;
   display: grid;
-  gap: 6px;
-  font-size: 8px;
+  gap: 8px;
+  font-size: 16px;
   color: #cfe8d6;
   text-shadow: 2px 2px 0 #000;
 }
@@ -115,7 +115,7 @@
 
 .settings-link {
   font-family: inherit;
-  font-size: 8px;
+  font-size: 16px;
   color: #9fc7a8;
   background: transparent;
   border: none;
